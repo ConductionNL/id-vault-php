@@ -16,7 +16,7 @@ By far the easiest way to install the id-Vault API client is to require it with 
 
     {
         "require": {
-            "conduction/id-vault-api-php":dev-main
+            "conduction/id-vault-api-php": "dev-main"
         }
     }
 
