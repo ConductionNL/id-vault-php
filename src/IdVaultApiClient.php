@@ -1,6 +1,6 @@
 <?php
 
-namespace Conduction\IdVaultApi;
+namespace Conduction\IdVaultApi\src;
 
 use GuzzleHttp\Client;
 use Throwable;
