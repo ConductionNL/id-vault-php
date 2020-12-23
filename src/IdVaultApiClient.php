@@ -3,7 +3,6 @@
 namespace Conduction\IdVaultApi;
 
 use GuzzleHttp\Client;
-use http\Url;
 use Throwable;
 
 class IdVaultApiClient {

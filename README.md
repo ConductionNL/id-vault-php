@@ -12,11 +12,11 @@ To use the id-Vault API client, the following things are required:
 
 By far the easiest way to install the id-Vault API client is to require it with [Composer](http://getcomposer.org/doc/00-intro.md).
 
-    $ composer require conduction/id-vault-api-php:dev-main
+    $ composer require conduction/id-vault-php:dev-main
 
     {
         "require": {
-            "conduction/id-vault-api-php": "dev-main"
+            "conduction/id-vault-php": "dev-main"
         }
     }
 
