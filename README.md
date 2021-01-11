@@ -12,11 +12,11 @@ To use the id-Vault API client, the following things are required:
 
 By far the easiest way to install the id-Vault API client is to require it with [Composer](http://getcomposer.org/doc/00-intro.md).
 
-    $ composer require conduction/id-vault-api-php:dev-main
+    $ composer require conduction/id-vault-php:dev-main
 
     {
         "require": {
-            "conduction/id-vault-api-php":dev-main
+            "conduction/id-vault-php": "dev-main"
         }
     }
 
@@ -63,7 +63,8 @@ This then returns the following json object:
     "expiresIn": "3600",
     "scope": "schema.person.email+schema.person.given_name+schema.person.family_name",
     "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0NTVmNzgyZS00YjJkLTRjYmItYWU4My02ZTI5N2UyNWZlZjkiLCJuYW1lIjoiTWFybGVlbiBSb21pam4iLCJlbWFpbCI6Im1hcmxlZW5yb21pam43M0BnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiTWFybGVlbiIsImZhbWlseV9uYW1lIjoiUm9taWpuIiwiY2xhaW1zIjp7InNjaGVtYS5wZXJzb24uZW1haWwiOlt7ImVtYWlsIjoibWFybGVlbnJvbWlqbjczQGdtYWlsLmNvbSJ9XSwic2NoZW1hLnBlcnNvbi5naXZlbl9uYW1lIjpbeyJnaXZlbl9uYW1lIjoiTWFybGVlbiJ9XSwic2NoZW1hLnBlcnNvbi5mYW1pbHlfbmFtZSI6W3siZmFtaWx5X25hbWUiOiJSb21pam4ifV19LCJpc3MiOiI0NTVmNzgyZS00YjJkLTRjYmItYWU4My02ZTI5N2UyNWZlZjkiLCJhdWQiOiJodHRwczpcL1wvZGV2LmNoZWNraW5nLm51XC91c2Vyc1wvYXV0aFwvaWR2YXVsdCIsImV4cCI6IjM2MDAiLCJqdGkiOiIxMDMzYzFmMy1hNzhkLTQ0Y2ItYWQxMy0zZjg4OGUwNzA0MTEiLCJhbGciOiJIUzI1NiIsImlhdCI6MTYwNzUxOTczMn0.Psq2XnCrgIgNQ-R4PHvctmCgC-VUhjBBNUFasHB0lAE",
-    "state": "XXXX-XXXX-XXXX-XXXX"
+    "state": "XXXX-XXXX-XXXX-XXXX",
+    "newUser": true
 }
 ```
 

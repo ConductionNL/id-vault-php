@@ -1,9 +1,8 @@
 <?php
 
-namespace Conduction\IdVaultApi;
+namespace Conduction\IdVaultApi\src;
 
 use GuzzleHttp\Client;
-use http\Url;
 use Throwable;
 
 class IdVaultApiClient {
@@ -84,20 +83,17 @@ class IdVaultApiClient {
      *
      * @return array|false returns response from id-vault or false
      */
-    public function authenticateUser(string $code, string $applicationId, string $secret, string $state = null)
+    public function authenticateUser(string $code, string $applicationId, string $secret, string $state = '')
     {
         try {
 
-            $body = [
-                'clientId'          => $applicationId,
-                'clientSecret'      => $secret,
-                'code'              => $code,
-                'grantType'         => 'authorization_code',
-                'state'             => $state
-            ];
-
             $response = $this->client->request(self::HTTP_POST, '/api/access_tokens', [
-                'json'         => $body,
+                'json'         => [
+                    'clientId'          => $applicationId,
+                    'clientSecret'      => $secret,
+                    'code'              => $code,
+                    'grantType'         => 'authorization_code',
+                ]
             ]);
 
         } catch (Throwable $e) {
