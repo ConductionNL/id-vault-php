@@ -136,6 +136,118 @@ class IdVaultApiClient {
     }
 
     /**
+     * this function requests sendLists from id-vault BS, the resource filter only works when a clientSecret is also given.
+     *
+     * @param string|null $clientSecret An id of an id-vault wac/application. This is used to get the sendLists of a specific application.
+     * @param string|null $resource An url of a resource that a sendList can also be connected to. For example an organization within the application this SendList is connected to. This is why this search filter only works if a clientSecret is also given.
+     *
+     * @return array|Throwable returns response from id-vault with an array of SendLists.
+     */
+    public function getSendLists(string $clientSecret = null, string $resource = null)
+    {
+        try {
+
+            $body['action'] = 'getLists';
+
+            if (isset($clientSecret)) {
+                $body['clientSecret'] = $clientSecret;
+                if (isset($resource)) {
+                    $body['resource'] = $resource;
+                }
+            }
+
+            $response = $this->client->request(self::HTTP_POST, '/api/send_lists', [
+                'json'         => $body,
+            ]);
+
+        } catch (Throwable $e) {
+            return $e;
+        }
+
+        return json_decode($response->getBody()->getContents(), true)['result'];
+    }
+
+    /**
+     * this function creates a new sendList in id-vault BS.
+     *
+     * @param string $clientSecret An id of an id-vault wac/application. This should be the UC/provider->configuration->secret of the application from where this sendList is made.
+     * @param array $sendList An array with information of the new sendList. This should contain at least the key name with a string value and can also contain the following keys: description, resource, (bool) mail and (bool) phone.
+     *
+     * @return array|Throwable returns response from id-vault with the created sendList.
+     */
+    public function createSendList(string $clientSecret, array $sendList)
+    {
+        try {
+
+            $body = [
+                'action' => 'createList',
+                'name' => $sendList['name'],
+                'clientSecret' => $clientSecret
+            ];
+
+            if (isset($sendList['resource'])) {
+                $body['resource'] = $sendList['resource'];
+            }
+            if (isset($sendList['mail'])) {
+                $body['mail'] = $sendList['mail'];
+            }
+            if (isset($sendList['phone'])) {
+                $body['phone'] = $sendList['phone'];
+            }
+            if (isset($sendList['description'])) {
+                $body['description'] = $sendList['description'];
+            }
+
+            $response = $this->client->request(self::HTTP_POST, '/api/send_lists', [
+                'json'         => $body,
+            ]);
+
+        } catch (Throwable $e) {
+            return $e;
+        }
+
+        return json_decode($response->getBody()->getContents(), true)['result'];
+    }
+
+    /**
+     * this function sends emails to all subscribers of an id-vault BS sendList
+     *
+     * @param string $sendListId The id of an id-vault sendList.
+     * @param array $mail An array with information for the email. This should contain at least the keys title (email title), html (email content) and sender (an email address) and can also contain the following keys: message, text.
+     *
+     * @return array|Throwable returns response from id-vault with an array of @id's of all send emails.
+     */
+    public function sendToSendList(string $sendListId, array $mail)
+    {
+        try {
+
+            $body = [
+                'action' => 'sendToList',
+                'resource' => 'https://id-vault.com/api/v1/bs/send_lists/'.$sendListId,
+                'title' => $mail['title'],
+                'html' => $mail['html'],
+                'sender' => $mail['sender']
+            ];
+
+            if (isset($mail['message'])) {
+                $body['message'] = $mail['message'];
+            }
+            if (isset($mail['text'])) {
+                $body['text'] = $mail['text'];
+            }
+
+            $response = $this->client->request(self::HTTP_POST, '/api/send_lists', [
+                'json'         => $body,
+            ]);
+
+        } catch (Throwable $e) {
+            return $e;
+        }
+
+        return json_decode($response->getBody()->getContents(), true)['result'];
+    }
+
+    /**
      * This function add a dossier to an id-vault user.
      *
      * @param array $scopes scopes the dossier is blocking (scopes must be authorized by the user).
