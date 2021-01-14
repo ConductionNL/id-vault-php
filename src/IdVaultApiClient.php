@@ -171,20 +171,28 @@ class IdVaultApiClient {
      * this function creates a new sendList in id-vault BS.
      *
      * @param string $clientSecret An id of an id-vault wac/application. This should be the UC/provider->configuration->secret of the application from where this sendList is made.
-     * @param array $sendList An array with information of the new sendList. This should contain at least the key name with a string value and can also contain the following keys: description, resource, (bool) mail and (bool) phone.
+     * @param array $sendList An array with information of the sendList. This should contain at least the key 'name' with a value when creating a new Sendlist. Or at least the key 'id' with the id of an id-vault sendList when updating a sendList. It can also contain the following keys: 'description', 'resource', (bool) 'mail' and (bool) 'phone'.
      *
-     * @return array|Throwable returns response from id-vault with the created sendList.
+     * @return array|Throwable returns response from id-vault with the created or updated sendList.
      */
-    public function createSendList(string $clientSecret, array $sendList)
+    public function saveSendList(string $clientSecret, array $sendList)
     {
         try {
 
             $body = [
-                'action' => 'createList',
-                'name' => $sendList['name'],
+                'action' => 'saveList',
                 'clientSecret' => $clientSecret
             ];
 
+            if (isset($sendList['id'])) {
+                $body['sendList'] = 'https://id-vault.com/api/v1/bs/send_lists/'.$sendList['id'];
+            }
+            if (isset($sendList['name'])) {
+                $body['name'] = $sendList['name'];
+            }
+            if (isset($sendList['description'])) {
+                $body['description'] = $sendList['description'];
+            }
             if (isset($sendList['resource'])) {
                 $body['resource'] = $sendList['resource'];
             }
@@ -194,9 +202,62 @@ class IdVaultApiClient {
             if (isset($sendList['phone'])) {
                 $body['phone'] = $sendList['phone'];
             }
-            if (isset($sendList['description'])) {
-                $body['description'] = $sendList['description'];
-            }
+
+            $response = $this->client->request(self::HTTP_POST, '/api/send_lists', [
+                'json'         => $body,
+            ]);
+
+        } catch (Throwable $e) {
+            return $e;
+        }
+
+        return json_decode($response->getBody()->getContents(), true)['result'];
+    }
+
+    /**
+     * this function deletes a sendList in id-vault BS and also removes any connections to this sendList in all subscribers.
+     *
+     * @param string $sendListId The id of an id-vault sendList that is going to be deleted.
+     *
+     * @return array|Throwable returns response from id-vault with all the affected id-vault BS subscribers and true if this sendList was correctly deleted.
+     */
+    public function deleteSendList(string $sendListId)
+    {
+        try {
+
+            $body = [
+                'action' => 'deleteList',
+                'sendList' => 'https://id-vault.com/api/v1/bs/send_lists/'.$sendListId
+            ];
+
+            $response = $this->client->request(self::HTTP_POST, '/api/send_lists', [
+                'json'         => $body,
+            ]);
+
+        } catch (Throwable $e) {
+            return $e;
+        }
+
+        return json_decode($response->getBody()->getContents(), true)['result'];
+    }
+
+    /**
+     * this function creates subscribers in id-vault BS, connecting email addresses to the given sendList.
+     *
+     * @param string $sendListId The id of an id-vault sendList that all email addresses will subscribe to.
+     * @param array $emails An array with email addresses that will be subscribed to the given sendList (id).
+     *
+     * @return array|Throwable returns response from id-vault with all the affected id-vault BS subscribers and true if this sendList was correctly deleted.
+     */
+    public function addSubscribersToSendList(string $sendListId, array $emails)
+    {
+        try {
+
+            $body = [
+                'action' => 'addSubscribersToList',
+                'sendList' => 'https://id-vault.com/api/v1/bs/send_lists/'.$sendListId,
+                'emails' => $emails,
+            ];
 
             $response = $this->client->request(self::HTTP_POST, '/api/send_lists', [
                 'json'         => $body,
@@ -223,7 +284,7 @@ class IdVaultApiClient {
 
             $body = [
                 'action' => 'sendToList',
-                'resource' => 'https://id-vault.com/api/v1/bs/send_lists/'.$sendListId,
+                'sendList' => 'https://id-vault.com/api/v1/bs/send_lists/'.$sendListId,
                 'title' => $mail['title'],
                 'html' => $mail['html'],
                 'sender' => $mail['sender']
