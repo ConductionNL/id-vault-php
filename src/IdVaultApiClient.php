@@ -357,6 +357,33 @@ class IdVaultApiClient {
     }
 
     /**
+     * this function get all the groups that are linked to a user in the application
+     *
+     * @param string $clientId id of the id-vault application.
+     * @param string $username email of the user you want to get the groups from.
+     *
+     * @return array|Throwable returns response from id-vault
+     */
+    public function getUserGroups(string $clientId, string $username)
+    {
+        try {
+            $body = [
+                'clientId' => $clientId,
+                'username' => $username,
+            ];
+
+            $response = $this->client->request(self::HTTP_POST, '/api/user_groups', [
+                'json'         => $body,
+            ]);
+
+        } catch (Throwable $e) {
+            return $e;
+        }
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    /**
      * this function invites a id-vault user to the provided group
      *
      * @param string $clientId id of the id-vault application.
