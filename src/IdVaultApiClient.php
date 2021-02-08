@@ -404,6 +404,36 @@ class IdVaultApiClient {
     }
 
     /**
+     * this function deletes a userGroup linked to the id-vault application
+     *
+     * @param string $clientId id of the id-vault application.
+     * @param string $organization (optional) uri of an organization object.
+     * @param string $groupId id of the id-vault group.
+     *
+     * @return array|Throwable returns response from id-vault
+     */
+    public function deleteGroup(string $clientId, string $organization = '', string $groupId = null)
+    {
+        try {
+
+            $body = [
+                'clientId' => $clientId,
+                'organization' => $organization,
+                'groupId' => $groupId,
+            ];
+
+            $response = $this->client->request(self::HTTP_POST, '/api/delete_groups', [
+                'json'         => $body,
+            ]);
+
+        } catch (Throwable $e) {
+            return $e;
+        }
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    /**
      * this function get all the groups and the users in those groups that are linked to an application
      *
      * @param string $clientId id of the id-vault application.
