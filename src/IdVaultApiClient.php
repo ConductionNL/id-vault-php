@@ -520,6 +520,36 @@ class IdVaultApiClient {
     }
 
     /**
+     * this function removes a membership of an id-vault user to the provided group, if it exists.
+     *
+     * @param string $username username of the user.
+     * @param string $clientId id of the id-vault application.
+     * @param string $groupId id of the id-vault group.
+     *
+     * @return array|Throwable returns response from id-vault
+     */
+    public function removeUser(string $username, string $clientId, string $groupId)
+    {
+        try {
+
+            $body = [
+                'username' => $username,
+                'clientId' => $clientId,
+                'groupId'  => $groupId,
+            ];
+
+            $response = $this->client->request(self::HTTP_POST, '/api/group_remove_users', [
+                'json'         => $body,
+            ]);
+
+        } catch (Throwable $e) {
+            return $e;
+        }
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    /**
      * this function accepts the group invite for the user.
      *
      * @param string $clientId id of the id-vault application.
