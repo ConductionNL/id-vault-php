@@ -407,12 +407,12 @@ class IdVaultApiClient {
      * this function deletes a userGroup linked to the id-vault application
      *
      * @param string $clientId id of the id-vault application.
-     * @param string $organization (optional) uri of an organization object.
-     * @param string $groupId id of the id-vault group.
+     * @param string $organization uri of an organization object.
+     * @param string $groupId (optional) id of the id-vault group.
      *
      * @return array|Throwable returns response from id-vault
      */
-    public function deleteGroup(string $clientId, string $organization = '', string $groupId = null)
+    public function deleteGroup(string $clientId, string $organization, string $groupId = null)
     {
         try {
 
