@@ -89,10 +89,10 @@ class IdVaultApiClient {
 
             $response = $this->client->request(self::HTTP_POST, '/api/access_tokens', [
                 'json'         => [
-                    'clientId'          => $applicationId,
-                    'clientSecret'      => $secret,
+                    'client_id'          => $applicationId,
+                    'client_secret'      => $secret,
                     'code'              => $code,
-                    'grantType'         => 'authorization_code',
+                    'grant_type'         => 'authorization_code',
                 ]
             ]);
 
