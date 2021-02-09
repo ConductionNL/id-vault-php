@@ -419,8 +419,10 @@ class IdVaultApiClient {
             $body = [
                 'clientId' => $clientId,
                 'organization' => $organization,
-                'groupId' => $groupId,
             ];
+            if (isset($groupId)) {
+                $body['groupId'] = $groupId;
+            }
 
             $response = $this->client->request(self::HTTP_POST, '/api/delete_groups', [
                 'json'         => $body,
