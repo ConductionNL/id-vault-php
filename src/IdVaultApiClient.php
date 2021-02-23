@@ -3,6 +3,7 @@
 namespace Conduction\IdVaultApi\src;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
 use Throwable;
 
 class IdVaultApiClient {
@@ -482,8 +483,10 @@ class IdVaultApiClient {
                 'json'         => $body,
             ]);
 
-        } catch (Throwable $e) {
+        } catch (ConnectException $e) {
             var_dump($e);
+            return $e;
+        } catch (Throwable $e) {
             return $e;
         }
 
