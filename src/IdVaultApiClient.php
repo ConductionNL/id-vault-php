@@ -483,6 +483,7 @@ class IdVaultApiClient {
             ]);
 
         } catch (Throwable $e) {
+            var_dump($e);
             return $e;
         }
 
