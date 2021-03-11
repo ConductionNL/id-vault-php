@@ -33,7 +33,7 @@ class IdVaultApiClient {
         $this->client = new Client([
             'headers'  => $this->headers,
             'base_uri' => self::API_ENDPOINT,
-            'timeout'  => 20.0,
+            'timeout'  => 30.0,
         ]);
 
     }
