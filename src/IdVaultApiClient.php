@@ -441,10 +441,11 @@ class IdVaultApiClient {
      *
      * @param string $clientId id of the id-vault application.
      * @param string $organization uri of the organization linked to the groups.
+     * @param bool $filter whether to filter or not filter users that have not accepted group invite.
      *
      * @return array|Throwable returns response from id-vault
      */
-    public function getGroups(string $clientId, string $organization)
+    public function getGroups(string $clientId, string $organization, bool $filter = true)
     {
         try {
             $body = [
@@ -452,9 +453,16 @@ class IdVaultApiClient {
                 'organization' => $organization,
             ];
 
-            $response = $this->client->request(self::HTTP_POST, '/api/groups', [
-                'json'         => $body,
-            ]);
+            if ($filter) {
+                $response = $this->client->request(self::HTTP_POST, '/api/groups', [
+                    'json'         => $body,
+                ]);
+            } else {
+                $response = $this->client->request(self::HTTP_POST, '/api/groups/all', [
+                    'json'         => $body,
+                ]);
+            }
+
 
         } catch (Throwable $e) {
             return $e;
